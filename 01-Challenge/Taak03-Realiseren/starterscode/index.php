@@ -12,15 +12,18 @@ $bbqIsChecked = false;
 $wifiIsChecked = false;
 $fireplaceIsChecked = false;
 $dishwasherIsChecked = false;
+$bikeIsChecked = false;
+
 
 $sql = "SELECT * FROM `homes`"; //Selecteer alle huisjes uit de database
+
 
 if (isset($_GET['filter_submit'])) {
 
     if ($_GET['faciliteiten'] == "ligbad") { // Als ligbad is geselecteerd filter dan de zoekresultaten
         $bathIsChecked = true;
 
-        $sql = "SELECT * FROM `homes` WHERE bath_present = 1"; // query die zoekt of er een BAD aanwezig is.
+        $sql = "SELECT * FROM `homes` WHERE bath_present = 1 "; // query die zoekt of er een BAD aanwezig is.
     }
 
     if ($_GET['faciliteiten'] == "zwembad") {
@@ -28,29 +31,33 @@ if (isset($_GET['filter_submit'])) {
 
         $sql = "SELECT * FROM `homes` WHERE pool_present = 1"; // query die zoekt of er een ZWEMBAD aanwezig is.
     }
-    if ($_GET['faciliteiten'] == "BBQ") {
-        $poolIsChecked = true;
+    if ($_GET['faciliteiten'] == "bbq") {
+        $bbqIsChecked = true;
 
         $sql = "SELECT * FROM `homes` WHERE bbq_present = 1"; // query die zoekt of er een ZWEMBAD aanwezig is.
     }
-    if ($_GET['faciliteiten'] == "WIFI") {
-        $poolIsChecked = true;
+    if ($_GET['faciliteiten'] == "wifi") {
+        $wifiIsChecked = true;
 
         $sql = "SELECT * FROM `homes` WHERE wifi_present = 0"; // query die zoekt of er een ZWEMBAD aanwezig is.
     }
+    if ($_GET['faciliteiten'] == "fireplace") {
+        $fireplaceIsChecked = true;
+
+        $sql = "SELECT * FROM `homes` WHERE fireplace_present = 1"; // query die zoekt of er een ZWEMBAD aanwezig is.
+    }
+    if ($_GET['faciliteiten'] == "dishwasher") {
+        $dishwasherIsChecked = true;
+
+        $sql = "SELECT * FROM `homes` WHERE dishwasher_present = 0"; // query die zoekt of er een ZWEMBAD aanwezig is.
+    }
+    if ($_GET['faciliteiten'] == "bike") {
+        $dishwasherIsChecked = true;
+
+        $sql = "SELECT * FROM `homes` WHERE bike_rental = 1"; // query die zoekt of er een ZWEMBAD aanwezig is.
+    }
 }
-if ($_GET['faciliteiten'] == "FirePlace") {
-    $poolIsChecked = true;
 
-    $sql = "SELECT * FROM `homes` WHERE fireplace_present = 1"; // query die zoekt of er een ZWEMBAD aanwezig is.
-
-}
-if ($_GET['faciliteiten'] == "dishwasher") {
-    $poolIsChecked = true;
-
-    $sql = "SELECT * FROM `homes` WHERE dishwasher_present = 0"; // query die zoekt of er een ZWEMBAD aanwezig is.
-
-}
 
 
 if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een sql-query correct geschreven is en dus data ophaalt uit de DB
@@ -80,45 +87,11 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
     </header>
     <main>
         <div class="left">
-            <div id="mapid"></div>
-            <div class="book">
-                <h3>Reservering maken</h3>
-                <div class="form-control">
-                    <label for="aantal_personen">Vakantiehuis</label>
-                    <select name="gekozen_huis" id="gekozen_huis">
-                        <option value="1">IJmuiden Cottage</option>
-                        <option value="2">Assen Bungalow</option>
-                        <option value="3">Espelo Entree</option>
-                        <option value="4">Weustenrade Woning</option>
-                    </select>
-                </div>
-                <div class="form-control">
-                    <label for="aantal_personen">Aantal personen</label>
-                    <input type="number" name="aantal_personen" id="aantal_personen">
-                </div>
-                <div class="form-control">
-                    <label for="aantal_dagen">Aantal dagen</label>
-                    <input type="number" name="aantal_dagen" id="aantal_dagen">
-                </div>
-                <div class="form-control">
-                    <h5>Beddengoed</h5>
-                    <label for="beddengoed_ja">Ja</label>
-                    <input type="radio" id="beddengoed_ja" name="beddengoed" value="ja">
-                    <label for="beddengoed_nee">Nee</label>
-                    <input type="radio" id="beddengoed_nee" name="beddengoed" value="nee">
-                </div>
-                <button>Reserveer huis</button>
-            </div>
-            <div class="currentBooking">
-                <div class="bookedHome"></div>
-                <div class="totalPriceBlock">Totale prijs &euro;<span class="totalPrice">0.00</span></div>
-            </div>
-        </div>
-        <div class="right">
-            <div class="filter-box">
+        <div class="filter-box">
                 <form class="filter-form">
                     <div class="form-control">
-                        <a href="index.php">Reset Filters</a>
+                        
+                        <button type="submit" name="reset filters">reset filters</button>
                     </div>
                     <div class="form-control">
                         <label for="ligbad">Ligbad</label>
@@ -129,24 +102,35 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
                         <input type="radio" id="zwembad" name="faciliteiten" value="zwembad" <?php if ($poolIsChecked) echo 'checked' ?>>
                     </div>
                     <div class="form-control">
-                        <label for="zwembad">bbq</label>
+                        <label for="bbq">bbq</label>
                         <input type="radio" id="bbq" name="faciliteiten" value="bbq" <?php if ($bbqIsChecked) echo 'checked' ?>>
-                        </div>
-                        <div class="form-control">
-                        <label for="zwembad">WIFI</label>
+                    </div>
+                    <div class="form-control">
+                        <label for="wifi">wifi</label>
                         <input type="radio" id="wifi" name="faciliteiten" value="wifi" <?php if ($wifiIsChecked) echo 'checked' ?>>
-                        </div>
-                        <div class="form-control">
-                        <label for="fireplace">FirePlace</label>
-                        <input type="radio" id="wifi" name="faciliteiten" value="fireplace" <?php if ($fireplaceIsChecked) echo 'checked' ?>>
-                        </div>
-                        <div class="form-control">
-                        <label for="fireplace">Dishwasher</label>
-                        <input type="radio" id="wifi" name="faciliteiten" value="dishwasher" <?php if ($dishwasherIsChecked) echo 'checked' ?>>
-                        </div>
-
+                    </div>
+                    <div class="form-control">
+                        <label for="fireplace">fireplace</label>
+                        <input type="radio" id="fireplace" name="faciliteiten" value="fireplace" <?php if ($fireplaceIsChecked) echo 'checked' ?>>
+                    </div>
+                    <div class="form-control">
+                        <label for="bike">bike</label>
+                        <input type="radio" id="bike" name="faciliteiten" value="bike" <?php if ($bikeIsChecked) echo 'checked' ?>>
+                    </div>
+                    <div class="form-control">
+                        <label for="dishwasher">dishwasher</label>
+                        <input type="radio" id="dishwasher" name="faciliteiten" value="dishwasher" <?php if ($dishwasherIsChecked) echo 'checked' ?>>
+                    </div>
+           
                     <button type="submit" name="filter_submit">Filter</button>
                 </form>
+        </div>
+          
+            <div id="mapid"></div>
+        </div>
+        <div class="right">
+
+       
                 <div class="homes-box">
                     <?php if (isset($database_gegevens) && $database_gegevens != null) : ?>
                         <?php foreach ($database_gegevens as $huisje) : ?>
@@ -160,52 +144,105 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
                             <div class="kenmerken">
                                 <h6>Kenmerken</h6>
                                 <ul>
-
+                            
                                     <?php
                                     if ($huisje['bath_present'] ==  1) {
-                                        echo "<li>Er is ligbad!</li>";
+                                        echo "<li>Er is ligbad!</li>";?>
+                                         
+                                   
+                                    
+
+                                    <?php
                                     }
+
+                                    
                                     ?>
+
+
+
 
 
                                     <?php
                                     if ($huisje['pool_present'] ==  1) {
-                                        echo "<li>Er is zwembad!</li>";
+                                        echo "<li>Er is zwembad!</li>";?>
+                                
+                                        <?php
                                     }
                                     ?>
 
-<?php
-                                    if ($huisje['bbq_present'] ==  1) {
-                                        echo "<li>Er is BBQ!</li>";
+                                 <?php
+                                    if ($huisje['bath_present'] ==  1) {
+                                        echo "<li>Er is bbq!</li>";
                                     }
                                     ?>
-                                    <?php
+                                   <?php
                                     if ($huisje['wifi_present'] ==  1) {
                                         echo "<li>Er is wifi!</li>";
                                     }
                                     ?>
-
-<?php
+                                     <?php
                                     if ($huisje['fireplace_present'] ==  1) {
                                         echo "<li>Er is fireplace!</li>";
                                     }
                                     ?>
-                                    <?php
+                                     <?php
                                     if ($huisje['dishwasher_present'] ==  1) {
-                                        echo "<li>Er is dishwaser!</li>";
+                                        echo "<li>Er is dishwasher!</li>";
                                     }
                                     ?>
-
+                                     <?php
+                                    if ($huisje['bike_rental'] ==  1) {
+                                        echo "<li>Er is bike!</li>";
+                                    }
+                                        if ($huisje['bike_rental'] ==  1) {
+                                    echo "<li>Fiets huren kost: €15,- </li>";
+                                    }
+                                    ?>
+                                    
                                 </ul>
 
                             </div>
-
-                        <?php endforeach; ?>
+                              <img src="images/<?php echo $huisje[ 'image'] ?>">
+                                                      <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
-
+<div class="book">
+                <h3>Reservering maken</h3>
+                <div class="form-control">
+                    <label for="aantal_personen">Vakantiehuis</label>
+                    <select name="gekozen_huis" id="gekozen_huis">
+                        <option value="1">IJmuiden Cottage</option>
+                        <option value="2">Assen Bungalow</option>
+                        <option value="3">Espelo Entree</option> 
+                        <option value="4">Weustenrade Woning</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="aantal_personen">Aantal personen</label>
+                    <input type="number" name="aantal_personen" id="aantal_personen">
+                </div>
+                <div class="form-control">
+                    <label for="aantal_dagen">Aantal dagen</label>
+                    <input type="number" name="aantal_dagen" id="aantal_dagen">
+                    <
+                </div>
+                <div class="form-control">
+                    <h5>Beddengoed</h5>
+                    <label for="beddengoed_ja">Ja</label>
+                    <input type="radio" id="beddengoed_ja" name="beddengoed" value="ja">
+                    <label for="beddengoed_nee">Nee</label>
+                    <input type="radio" id="beddengoed_nee" name="beddengoed" value="nee">
+                </div>
+                <button>Reserveer huis</button>
             </div>
-        </div> 
+            <div class="currentBooking">
+                <div class="bookedHome"></div>
+                <div class="totalPriceBlock">Totale prijs &euro;<span class="totalPrice">0.00</span></div>
+                
+            </div>
+            </div>
+            
+        </div>
     </main>
     <footer>
         <div></div>
@@ -216,17 +253,18 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
     <script src="js/map_init.js"></script>
     <script>
         // De verschillende markers moeten geplaatst worden. Vul de longitudes en latitudes uit de database hierin
-        var coordinates = [
-[52.28785, 4.83866]
-
+        
+        
+var coordinates = [
+            [52.44902, 4.61001],[52.99864,6.64928],[52.30340,6.36800],[50.89720,5.90979]
         ];
-          
+
         var bubbleTexts = [
+            "Ijmuiden cottage", "Assen bungalo", "Espolo entree", "Weustenrade woning"
+        ];    
 
-
-        ];
     </script>
     <script src="js/place_markers.js"></script>
 </body>
-
+        
 </html>
