@@ -73,12 +73,14 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Document</title>    
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
     <link href="css/index.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -122,10 +124,10 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
                         <input type="radio" id="dishwasher" name="faciliteiten" value="dishwasher" <?php if ($dishwasherIsChecked) echo 'checked' ?>>
                     </div>
            
-                    <button type="submit" name="filter_submit">Filter</button>
+                    <button type="submit" name=" filter_submit"> Filter</button>
                 </form>
         </div>
-          
+            
             <div id="mapid"></div>
         </div>
         <div class="right">
@@ -136,12 +138,23 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
                         <?php foreach ($database_gegevens as $huisje) : ?>
                             <h4>
                                 <?php echo $huisje['name']; ?>
-                            </h4>
+                                <?php echo $huisje['price_p_p_p_n']; ?> 
+                                <?php echo $huisje['price_bed_sheets']; ?> 
+                                <?php echo $huisje['id']; ?> 
 
+                                
+                            </h4>
+                            
+                          <?php  $huisjes = array (
+                          array( $huisje['id'],$huisje['price_bed_sheets'],$huisje['price_p_p_p_n'])
+                        
+                          ); print_r($huisjes); 
+
+                        ?>
                             <p>
                                 <?php echo $huisje['description'] ?>
                             </p>
-                            <div class="kenmerken">
+                            <div class="kenmerken"> 
                                 <h6>Kenmerken</h6>
                                 <ul>
                             
@@ -207,6 +220,7 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
                     <?php endif; ?>
                 </div>
 <div class="book">
+    <form method="get" action="">
                 <h3>Reservering maken</h3>
                 <div class="form-control">
                     <label for="aantal_personen">Vakantiehuis</label>
@@ -233,15 +247,17 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
                     <label for="beddengoed_nee">Nee</label>
                     <input type="radio" id="beddengoed_nee" name="beddengoed" value="nee">
                 </div>
-                <button>Reserveer huis</button>
+                <button type="submit"> Reserveer huis</button>
+
             </div>
+
             <div class="currentBooking">
                 <div class="bookedHome"></div>
                 <div class="totalPriceBlock">Totale prijs &euro;<span class="totalPrice">0.00</span></div>
                 
             </div>
             </div>
-            
+         </form>
         </div>
     </main>
     <footer>
@@ -259,7 +275,7 @@ var coordinates = [
             [52.44902, 4.61001],[52.99864,6.64928],[52.30340,6.36800],[50.89720,5.90979]
         ];
 
-        var bubbleTexts = [
+        var bubbleTexts = [2
             "Ijmuiden cottage", "Assen bungalo", "Espolo entree", "Weustenrade woning"
         ];    
 
